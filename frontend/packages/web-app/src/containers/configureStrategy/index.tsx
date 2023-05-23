@@ -1,7 +1,6 @@
 import { useApolloClient } from '@apollo/client';
 import {
   AlertInline,
-  DropdownInput,
   Label,
   ValueInput,
 } from '@aragon/ui-components';
@@ -43,11 +42,9 @@ const ConfigureStrategyForm: React.FC<ConfigureStrategyFormProps> = ({
 }) => {
   const { t } = useTranslation();
   const client = useApolloClient();
-  const { open } = useGlobalModalContext();
   const { network } = useNetwork();
   const { address } = useWallet();
   const { infura: provider } = useProviders();
-  const { setSelectedActionIndex } = useActionsContext();
   const { alert } = useAlertContext();
 
   const { data: daoDetails } = useDaoDetailsQuery();
@@ -217,28 +214,6 @@ const ConfigureStrategyForm: React.FC<ConfigureStrategyFormProps> = ({
     [alert, t]
   );
 
-  /*************************************************
-   *                Field Validators               *
-   *************************************************/
-  const addressValidator = useCallback(
-    async (address: string) => {
-      if (isNativeToken(address)) return true;
-
-      const validationResult = await validateTokenAddress(address, provider);
-
-      // address invalid, reset token fields
-      if (validationResult !== true) {
-        resetField(`actions.${actionIndex}.tokenName`);
-        resetField(`actions.${actionIndex}.tokenImgUrl`);
-        resetField(`actions.${actionIndex}.tokenSymbol`);
-        resetField(`actions.${actionIndex}.tokenBalance`);
-      }
-
-      return validationResult;
-    },
-    [actionIndex, provider, resetField]
-  );
-
   const amountValidator = useCallback(
     async (amount: string) => {
       const tokenAddress = getValues(`actions.${actionIndex}.tokenAddress`);
@@ -267,25 +242,6 @@ const ConfigureStrategyForm: React.FC<ConfigureStrategyFormProps> = ({
     [errors.tokenAddress, getValues, actionIndex, provider, t, nativeCurrency]
   );
 
-  const recipientValidator = useCallback(
-    async (recipient: string) => {
-      let ensAddress = null;
-
-      try {
-        ensAddress = await provider?.resolveName(recipient);
-      } catch (err) {
-        console.error('Error, fetching ens name', err);
-
-        if (isAddress(recipient)) return validateAddress(recipient);
-        return t('errors.ensUnsupported');
-      }
-
-      // if no associating ensAddress, assume normal address and not ens name
-      if (ensAddress) return true;
-      return validateAddress(recipient);
-    },
-    [provider, t]
-  );
 
   /*************************************************
    *                    Render                     *
@@ -337,8 +293,6 @@ const ConfigureStrategyForm: React.FC<ConfigureStrategyFormProps> = ({
           control={control}
           defaultValue=""
           rules={{
-            required: t('errors.required.amount'),
-            validate: amountValidator,
           }}
           render={({
             field: { name, onBlur, onChange, value },

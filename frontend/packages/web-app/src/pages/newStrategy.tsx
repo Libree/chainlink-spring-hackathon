@@ -34,6 +34,7 @@ import { formatUnits, toDisplayEns } from 'utils/library';
 import { Finance } from 'utils/paths';
 import { BaseTokenInfo } from 'utils/types';
 import ConfigureStrategyForm from 'containers/configureStrategy';
+import ConfigureStrategyDetail from 'containers/strategyDetail';
 
 export type TokenFormData = {
   tokenName: string;
@@ -210,7 +211,30 @@ const NewStrategy: React.FC = () => {
                 }}
               >
                 <ConfigureStrategyForm actionIndex={0} />
-                
+
+              </Step>
+              <Step
+                wizardTitle={'Recommended Strategy'}
+                wizardDescription={'This is the strategy selected by the IA model, your proposal will need to pass a vote'}
+                isNextButtonDisabled={
+                  false
+                }
+                onNextButtonClicked={next => {
+                  trackEvent('newWithdraw_continueBtn_clicked', {
+                    step: '1_configure_withdraw',
+                    settings: {
+                      to: formMethods.getValues('actions.0.to'),
+                      token_address: formMethods.getValues(
+                        'actions.0.tokenAddress'
+                      ),
+                      amount: formMethods.getValues('actions.0.amount'),
+                    },
+                  });
+                  next();
+                }}
+              >
+                <ConfigureStrategyDetail actionIndex={0} />
+
               </Step>
               <Step
                 wizardTitle={t('newWithdraw.setupVoting.title')}
