@@ -6,11 +6,12 @@ import {
   Tag,
   IlluObject,
 } from '@aragon/ui-components';
-import {withTransaction} from '@elastic/apm-rum-react';
+import { withTransaction } from '@elastic/apm-rum-react';
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {useNavigate} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, generatePath, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useNetwork } from 'context/network';
 
 import TokenList from 'components/tokenList';
 import TransferList from 'components/transferList';
@@ -19,17 +20,18 @@ import {
   TokenSectionWrapper,
   TransferSectionWrapper,
 } from 'components/wrappers';
-import {useGlobalModalContext} from 'context/globalModals';
-import {useTransactionDetailContext} from 'context/transactionDetail';
-import {useDaoVault} from 'hooks/useDaoVault';
-import {useMappedBreadcrumbs} from 'hooks/useMappedBreadcrumbs';
+import { useGlobalModalContext } from 'context/globalModals';
+import { useTransactionDetailContext } from 'context/transactionDetail';
+import { useDaoVault } from 'hooks/useDaoVault';
+import { useMappedBreadcrumbs } from 'hooks/useMappedBreadcrumbs';
 import useScreen from 'hooks/useScreen';
-import {trackEvent} from 'services/analytics';
-import {sortTokens} from 'utils/tokens';
+import { trackEvent } from 'services/analytics';
+import { sortTokens } from 'utils/tokens';
 import PageEmptyState from 'containers/pageEmptyState';
-import {Loading} from 'components/temporary';
-import {useDaoDetailsQuery} from 'hooks/useDaoDetails';
-import {htmlIn} from 'utils/htmlIn';
+import { Loading } from 'components/temporary';
+import { useDaoDetailsQuery } from 'hooks/useDaoDetails';
+import { htmlIn } from 'utils/htmlIn';
+import { NewStrategy } from 'utils/paths';
 
 type Sign = -1 | 0 | 1;
 const colors: Record<Sign, string> = {
@@ -39,17 +41,19 @@ const colors: Record<Sign, string> = {
 };
 
 const Finance: React.FC = () => {
-  const {t} = useTranslation();
-  const {data: daoDetails, isLoading} = useDaoDetailsQuery();
-  const {open} = useGlobalModalContext();
-  const {isMobile, isDesktop} = useScreen();
+  const { t } = useTranslation();
+  const { data: daoDetails, isLoading } = useDaoDetailsQuery();
+  const { open } = useGlobalModalContext();
+  const { isMobile, isDesktop } = useScreen();
+  const { network } = useNetwork();
+  const { dao } = useParams();
 
   // load dao details
   const navigate = useNavigate();
-  const {breadcrumbs, icon, tag} = useMappedBreadcrumbs();
+  const { breadcrumbs, icon, tag } = useMappedBreadcrumbs();
 
-  const {handleTransferClicked} = useTransactionDetailContext();
-  const {tokens, totalAssetChange, totalAssetValue, transfers} = useDaoVault();
+  const { handleTransferClicked } = useTransactionDetailContext();
+  const { tokens, totalAssetChange, totalAssetValue, transfers } = useDaoVault();
 
   sortTokens(tokens, 'treasurySharePercentage', true);
 
@@ -74,8 +78,8 @@ const Finance: React.FC = () => {
                 hair: 'bun',
               }}
               {...(isMobile
-                ? {height: 165, width: 295}
-                : {height: 225, width: 400})}
+                ? { height: 165, width: 295 }
+                : { height: 225, width: 400 })}
             />
             <IlluObject object={'wallet'} className="-ml-36" />
           </div>
@@ -126,6 +130,19 @@ const Finance: React.FC = () => {
                   </SubtitleContainer>
                 </TextContainer>
 
+                <ButtonText
+                  size="large"
+                  label={'New Strategy'}
+                  iconLeft={<IconAdd />}
+                  className="w-full tablet:w-auto"
+                  onClick={() => {
+                    trackEvent('finance_newTransferBtn_clicked', {
+                      dao_address: daoDetails?.address,
+                    });
+                    navigate(generatePath(NewStrategy, { network, dao }));
+                  }}
+                />
+
                 {/* Button */}
                 <ButtonText
                   size="large"
@@ -157,8 +174,8 @@ const Finance: React.FC = () => {
                     hair: 'bun',
                   }}
                   {...(isMobile
-                    ? {height: 165, width: 295}
-                    : {height: 225, width: 400})}
+                    ? { height: 165, width: 295 }
+                    : { height: 225, width: 400 })}
                 />
                 <IlluObject object={'wallet'} className="-ml-32" />
               </div>
