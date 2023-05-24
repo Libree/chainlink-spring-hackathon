@@ -1,22 +1,23 @@
 import React from 'react';
 
-import {useDaoDetailsQuery} from 'hooks/useDaoDetails';
-import {Action} from 'utils/types';
-import {AddAddressCard} from './actions/addAddressCard';
-import {MintTokenCard} from './actions/mintTokenCard';
-import {ModifyMetadataCard} from './actions/modifyMetadataCard';
-import {ModifyMultisigSettingsCard} from './actions/modifyMultisigSettingsCard';
-import {ModifyMvSettingsCard} from './actions/modifySettingsCard';
-import {RemoveAddressCard} from './actions/removeAddressCard';
-import {WithdrawCard} from './actions/withdrawCard';
-import {SCCExecutionCard} from './actions/sccExecutionWidget';
+import { useDaoDetailsQuery } from 'hooks/useDaoDetails';
+import { Action } from 'utils/types';
+import { AddAddressCard } from './actions/addAddressCard';
+import { MintTokenCard } from './actions/mintTokenCard';
+import { ModifyMetadataCard } from './actions/modifyMetadataCard';
+import { ModifyMultisigSettingsCard } from './actions/modifyMultisigSettingsCard';
+import { ModifyMvSettingsCard } from './actions/modifySettingsCard';
+import { RemoveAddressCard } from './actions/removeAddressCard';
+import { WithdrawCard } from './actions/withdrawCard';
+import { SCCExecutionCard } from './actions/sccExecutionWidget';
+import { StrategyCard } from './actions/strategyCard';
 
 type ActionsFilterProps = {
   action: Action;
 };
 
-export const ActionsFilter: React.FC<ActionsFilterProps> = ({action}) => {
-  const {data: dao} = useDaoDetailsQuery();
+export const ActionsFilter: React.FC<ActionsFilterProps> = ({ action }) => {
+  const { data: dao } = useDaoDetailsQuery();
 
   // all actions have names
   switch (action.name) {
@@ -38,6 +39,8 @@ export const ActionsFilter: React.FC<ActionsFilterProps> = ({action}) => {
       return <ModifyMultisigSettingsCard action={action} />;
     case 'external_contract_action':
       return <SCCExecutionCard action={action} />;
+    case 'new_strategy':
+      return <StrategyCard action={action} />;
     default:
       return <></>;
   }

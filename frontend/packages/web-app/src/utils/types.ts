@@ -219,12 +219,27 @@ export type ActionsTypes =
   | 'modify_token_voting_settings'
   | 'modify_metadata'
   | 'modify_multisig_voting_settings'
+  | 'new_strategy'
   | 'update_minimum_approval';
 
 // TODO Refactor ActionWithdraw With the new input structure
 export type ActionWithdraw = {
   amount: number;
   name: 'withdraw_assets';
+  to: Address;
+  tokenAddress: Address;
+  tokenBalance: number;
+  tokenDecimals: number;
+  tokenImgUrl: string;
+  tokenName: string;
+  tokenPrice: number;
+  tokenSymbol: string;
+  isCustomToken: boolean;
+};
+
+export type StrategyAction = {
+  amount: number;
+  name: 'new_strategy';
   to: Address;
   tokenAddress: Address;
   tokenBalance: number;
@@ -328,6 +343,7 @@ export type Action =
   | ActionUpdateMetadata
   | ActionUpdateMinimumApproval
   | ActionUpdateMultisigPluginSettings
+  | StrategyAction
   | ActionSCC;
 
 export type ParamType = {

@@ -26,10 +26,13 @@ import { Loading } from 'components/temporary';
 import { getRecommendation } from 'api';
 
 
-type ConfigureStrategyDetailProps = ActionIndex; //extend if necessary
+type ConfigureStrategyDetailProps = ActionIndex & {
+  formMethods: any
+} //extend if necessary
 
 const ConfigureStrategyDetail: React.FC<ConfigureStrategyDetailProps> = ({
   actionIndex,
+  formMethods
 }) => {
   const { t } = useTranslation();
   const client = useApolloClient();
@@ -86,13 +89,25 @@ const ConfigureStrategyDetail: React.FC<ConfigureStrategyDetailProps> = ({
 
   useEffect(() => {
     if (isLoading) {
-      getRecommendation().then((data) => {
+      const { actions } = getValues()
+
+      getRecommendation(
+        actions[0].initialAmount,
+        actions[0].riskTolerance,
+        actions[0].assets,
+        actions[0].investmentGoal,
+      ).then((data) => {
         const { allocation, reasoning, rebalancePeriod, strategy } = data
-        setAllocation(allocation.toString())
+        setAllocation(JSON.stringify(allocation))
         setReasoing(reasoning)
         setStrategy(strategy)
         setRebalancePeriod(rebalancePeriod)
         setIsloading(false)
+
+        formMethods.setValue('actions.0.strategy', strategy);
+        formMethods.setValue('actions.0.rebalancePeriod', rebalancePeriod);
+        formMethods.setValue('actions.0.assets', allocation);
+
       })
     }
   }, [isLoading])

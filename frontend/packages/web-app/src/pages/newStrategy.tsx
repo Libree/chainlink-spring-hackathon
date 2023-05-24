@@ -233,7 +233,7 @@ const NewStrategy: React.FC = () => {
                   next();
                 }}
               >
-                <ConfigureStrategyDetail actionIndex={0} />
+                <ConfigureStrategyDetail actionIndex={0} formMethods={formMethods}/>
 
               </Step>
               <Step
