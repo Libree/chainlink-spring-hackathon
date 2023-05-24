@@ -1,15 +1,20 @@
 const BASE_URL = 'http://localhost:5000';
 
-export const getRecommendation = async (): Promise<any> => {
+export const getRecommendation = async (
+    initialAmount: string,
+    riskTolerance: string,
+    assets: string,
+    investmentGoal: string
+): Promise<any> => {
 
     const requestOptions: RequestInit = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            "initialAmount": 10000,
-            "riskTolerance": "low",
-            "assets": ["BTC", "ETH", "USDC", "LINK"],
-            "investmentGoal": "Get some yield without having too much volatility"
+            initialAmount,
+            riskTolerance,
+            assets: [assets],
+            investmentGoal
         }),
     };
 
