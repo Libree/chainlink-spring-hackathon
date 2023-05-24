@@ -2,7 +2,7 @@ import { useApolloClient } from '@apollo/client';
 import {
   CardText
 } from '@aragon/ui-components';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FormState,
   useFormContext,
@@ -22,6 +22,8 @@ import { fetchTokenData } from 'services/prices';
 import { CHAIN_METADATA } from 'utils/constants';
 import { fetchBalance, getTokenInfo, isNativeToken } from 'utils/tokens';
 import { ActionIndex } from 'utils/types';
+import { Loading } from 'components/temporary';
+import { getRecommendation } from 'api';
 
 
 type ConfigureStrategyDetailProps = ActionIndex; //extend if necessary
@@ -35,6 +37,13 @@ const ConfigureStrategyDetail: React.FC<ConfigureStrategyDetailProps> = ({
   const { address } = useWallet();
   const { infura: provider } = useProviders();
   const { alert } = useAlertContext();
+
+  const [isLoading, setIsloading] = useState(true)
+  const [reasoing, setReasoing] = useState("")
+  const [strategy, setStrategy] = useState("")
+  const [allocation, setAllocation] = useState("")
+  const [rebalancePeriod, setRebalancePeriod] = useState("")
+
 
   const { data: daoDetails } = useDaoDetailsQuery();
 
@@ -74,6 +83,19 @@ const ConfigureStrategyDetail: React.FC<ConfigureStrategyDetailProps> = ({
     setValue,
     nativeCurrency,
   ]);
+
+  useEffect(() => {
+    if (isLoading) {
+      getRecommendation().then((data) => {
+        const { allocation, reasoning, rebalancePeriod, strategy } = data
+        setAllocation(allocation.toString())
+        setReasoing(reasoning)
+        setStrategy(strategy)
+        setRebalancePeriod(rebalancePeriod)
+        setIsloading(false)
+      })
+    }
+  }, [isLoading])
 
   useEffect(() => {
     if (!name) {
@@ -166,10 +188,14 @@ const ConfigureStrategyDetail: React.FC<ConfigureStrategyDetailProps> = ({
 
   return (
     <>
-      <CardText type='label' title='Strategy Name' content='Dual momentum'/>
-      <CardText type='label' title='Reasoing' content='Reasoing'/>
-      <CardText type='label' title='Asset Allocation' content='DAI 20% USDC 20% WETH 20%'/>
-      <CardText type='label' title='Rebalance period' content='Monthly'/>
+      {isLoading ? <Loading />
+        : <>
+          <CardText type='label' title='Strategy Name' content={strategy} />
+          <CardText type='label' title='Reasoing' content={reasoing} />
+          <CardText type='label' title='Asset Allocation' content={allocation} />
+          <CardText type='label' title='Rebalance period' content={rebalancePeriod} />
+        </>
+      }
     </>
   );
 };
@@ -197,14 +223,3 @@ export function isValid(
   return true;
 }
 
-/*************************************************
- *               Styled Components               *
- *************************************************/
-
-const FormItem = styled.div.attrs({
-  className: 'space-y-1.5',
-})``;
-
-const TokenBalance = styled.p.attrs({
-  className: 'flex-1 px-1 text-xs text-right text-ui-600',
-})``;
