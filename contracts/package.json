@@ -5,6 +5,7 @@
     "hardhat": "^2.14.0"
   },
   "dependencies": {
-    "@aragon/osx": "^1.2.0"
+    "@aragon/osx": "^1.2.0",
+    "@chainlink/contracts": "^0.6.1"
   }
 }
