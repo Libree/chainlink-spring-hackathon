@@ -1,3 +1,4 @@
 langchain
 flask
 flask_cors
+openai

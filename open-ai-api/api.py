@@ -5,7 +5,7 @@ from langchain.schema import (
     SystemMessage
 )
 
-from utils import create_strategy_prompt
+from utils import create_strategy_prompt, create_rebalance_prompt
 
 
 def get_recommendation(initial_amount, risk_tolerance, assets, investment_goal):
@@ -15,6 +15,37 @@ def get_recommendation(initial_amount, risk_tolerance, assets, investment_goal):
         investment_goal=investment_goal,
         initial_amount=initial_amount,
         risk_tolerance=risk_tolerance
+    )
+
+    chat = ChatOpenAI(temperature=0)
+
+    messages = [
+        SystemMessage(content="You are a helpful finance assistant"),
+        HumanMessage(content=prompt)
+    ]
+
+
+    ai_message = chat(messages)
+
+    content = ai_message.content
+    initial_index = content.find('{')
+    final_index = content.rfind('}')
+    json_data = content[initial_index:final_index+1]
+
+    recommentation = json.loads(json_data)
+
+    print(recommentation)
+
+    return recommentation
+
+
+def get_rebalance_recommendation(strategy, risk_tolerance, assets, amount_assets):
+
+    prompt = create_rebalance_prompt(
+        strategy=strategy,
+        risk_tolerance=risk_tolerance,
+        assets=assets,
+        amount_assets=amount_assets
     )
 
     chat = ChatOpenAI(temperature=0)
