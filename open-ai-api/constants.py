@@ -15,6 +15,17 @@ class PromptTemplate:
         - rebalancePeriod: recommended rebalance period
     """
 
+    template_strategy_rebalance = """
+        Knowing that I am following a {strategy} strategy,
+        with a risk tolerance {risk_tolerance},
+        an the following assets {assets}, 
+        that currently have the following weights {amount_assets},
+        Recommend if I should rebalance, thinking of the most efficient way to do that and if worth, knowing that the cost of each swap is 0.3%
+        Return the recommendation in json format. The json output should have the following fields:
+        - rebalanceNeeded: yes or no
+        - allocation: list of assets recommend with their weight expressed in decimal, should follow the format BTC: 0.3, ETH: 0.2 key symbol value weight
+    """
+
 
 class InvestmentData:
 
@@ -25,4 +36,4 @@ class InvestmentData:
         'Momemtum',
     ]
 
-    swap_cost='0.03%'
+    swap_cost = '0.03%'
