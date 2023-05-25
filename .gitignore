@@ -4,3 +4,5 @@ frontend/packages/ui-components/dist
 frontend/packages/web-app/node_modules
 frontend/packages/ui-components/node_modules
 frontend/packages/web-app/.env
+open-ai-api/__pycache__
+open-ai-api/env
