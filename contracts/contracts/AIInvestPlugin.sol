@@ -16,12 +16,14 @@ contract AIInvestPlugin is
 
     struct Strategy {
         bool rebalanceRequired;
+        bool rebalanceReady;
         uint256 rebalancePeriod;
         string riskTolerance;
         string investmentGoal;
         address[] assets;
         uint256[] amounts;
         uint256 lastRebalance;
+        bytes32 rebalanceId;
     }
 
     Counters.Counter public _strategyIdCounter;
@@ -41,15 +43,15 @@ contract AIInvestPlugin is
         uint256 strategyId = _strategyIdCounter.current();
         _strategyIdCounter.increment();
 
-        strategies[strategyId] = Strategy(
-            true,
-            _rebalancePeriod,
-            _riskTolerance,
-            _investmentGoal,
-            _assets,
-            _amounts,
-            0
-        );
+        // strategies[strategyId] = Strategy(
+        //     true,
+        //     _rebalancePeriod,
+        //     _riskTolerance,
+        //     _investmentGoal,
+        //     _assets,
+        //     _amounts,
+        //     0
+        // );
     }
 
     function updateRebalance(uint256 _strategyId) external {
