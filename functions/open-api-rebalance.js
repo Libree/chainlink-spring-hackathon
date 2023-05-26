@@ -21,8 +21,9 @@ try {
 }
 
 const rebalance = response.rebalanceNeeded
+const reasoning = response.reasoning
 const allocation = response.allocation
 
 return Functions.encodeString(
-    `${response.rebalanceNeeded},${Object.keys(allocation).map(function (k) { return allocation[k] }).join(",")}`
+    `${response.rebalanceNeeded},${reasoning},${Object.keys(allocation).map(function (k) { return allocation[k] }).join(",")}`
 )

@@ -40,7 +40,7 @@ const requestConfig = {
   // Args (string only array) can be accessed within the source code with `args[index]` (ie: args[0]).
   args: ["Risk Parity", "low", "BTC,ETH,LINK,USDC", "0.2,0.3,0.2,0.3"],
   // Expected type of the returned value
-  expectedReturnType: ReturnType.uint256,
+  expectedReturnType: ReturnType.string,
   // Redundant URLs which point to encrypted off-chain secrets
   secretsURLs: [],
 }
