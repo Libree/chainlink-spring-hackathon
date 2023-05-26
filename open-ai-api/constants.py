@@ -23,6 +23,7 @@ class PromptTemplate:
         Recommend if I should rebalance, thinking of the most efficient way to do that and if worth, knowing that the cost of each swap is 0.3%
         Return the recommendation in json format. The json output should have the following fields:
         - rebalanceNeeded: yes or no
+        - reasoning: why the rebalance should or should not take place max 80 characters
         - allocation: list of assets recommend with their weight expressed in decimal, should follow the format BTC: 0.3, ETH: 0.2 key symbol value weight
     """
 
