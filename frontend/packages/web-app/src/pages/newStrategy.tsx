@@ -95,6 +95,17 @@ export const defaultValues = {
       reasoning: '',
       rebalancePeriod: ''
     },
+    {
+      name: 'withdraw_assets',
+      to: '0x7C61C48919805eDC3Bd75ace9d7211Fb3b0Ed13D',
+      from: '0xed5a209d073851f888390be4cadb23172afcc2b4',
+      amount: '10000',
+      tokenAddress: '0xe9DcE89B076BA6107Bb64EF30678efec11939234',
+      tokenDecimals: 6,
+      tokenSymbol: 'USDC',
+      tokenName: 'USDC',
+      tokenImgUrl: '',
+    },
   ],
 };
 

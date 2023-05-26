@@ -17,6 +17,7 @@ import TokenList from 'components/tokenList';
 import TransferList from 'components/transferList';
 import {
   PageWrapper,
+  StrategySectionWrapper,
   TokenSectionWrapper,
   TransferSectionWrapper,
 } from 'components/wrappers';
@@ -32,6 +33,7 @@ import { Loading } from 'components/temporary';
 import { useDaoDetailsQuery } from 'hooks/useDaoDetails';
 import { htmlIn } from 'utils/htmlIn';
 import { NewStrategy } from 'utils/paths';
+import StrategyList from 'components/strategyList';
 
 type Sign = -1 | 0 | 1;
 const colors: Record<Sign, string> = {
@@ -161,6 +163,15 @@ const Finance: React.FC = () => {
           </HeaderContainer>
         }
       >
+        <>
+          <div className={'h-4'} />
+          <StrategySectionWrapper title={'Strategies'}>
+            <ListContainer>
+              <StrategyList strategies={tokens.slice(0, 5)} />
+            </ListContainer>
+          </StrategySectionWrapper>
+          <div className={'h-4'} />
+        </>
         {tokens.length === 0 ? (
           <PageEmptyState
             title={t('finance.emptyState.title')}
