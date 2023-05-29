@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@aragon/osx": "^1.2.0",
-    "@chainlink/contracts": "^0.6.1"
+    "@chainlink/contracts": "^0.6.1",
+    "@uniswap/v3-periphery": "^1.4.3"
   }
 }

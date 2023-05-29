@@ -25,7 +25,7 @@ describe('Strategies', function () {
             await strategyContract.createStrategy(
                 "Risk Parity",
                 [WBTC_ADDRESS, USDC_ADDRESS, WETH_ADDRESS, LINK_ADDRESS],
-                [100, 1000, 100, 10000],
+                [20, 20, 30, 30],
                 1000,
                 "low",
                 "get some yield without too much volatility"
@@ -34,6 +34,8 @@ describe('Strategies', function () {
             const strategy = await strategyContract.getStrategy(0)
 
             expect(strategy.name).to.be.equals('Risk Parity')
+
+            await strategyContract.smt("0x7965732c43757272656e74207765696768747320646f206e6f7420616c69676e2077697468207269736b207061726974792073747261746567792c302e33352c302e32352c302e31352c302e3235")
     
         });
     });

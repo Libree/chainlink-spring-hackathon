@@ -36,14 +36,7 @@ contract RebalanceChecker is AutomationCompatibleInterface {
     function performUpkeep(bytes calldata performData) external override {
         uint256 strategyToRebalance = abi.decode(performData, (uint));
 
-        string memory name;
-        string memory riskTolerance;
-        string memory investmentGoal;
-        address[] memory assets;
-        uint256[] memory amounts;
-
-        (name, riskTolerance, investmentGoal, assets, amounts) = strategyManager
-            .getStrategyMetadata(strategyToRebalance);
+        // strategyManager.rebalance(strategyToRebalance);
 
         strategyManager.updateRebalaceRequired(strategyToRebalance, false);
     }
