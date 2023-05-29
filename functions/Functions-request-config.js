@@ -38,7 +38,7 @@ const requestConfig = {
   // ETH wallet key used to sign secrets so they cannot be accessed by a 3rd party
   walletPrivateKey: process.env["PRIVATE_KEY"],
   // Args (string only array) can be accessed within the source code with `args[index]` (ie: args[0]).
-  args: ["Risk Parity", "low", "BTC,ETH,LINK,USDC", "0.2,0.3,0.2,0.3"],
+  args: ["Risk Parity", "low", "BTC,ETH,LINK,USDC", "200,300,2000,1000", "0"],
   // Expected type of the returned value
   expectedReturnType: ReturnType.string,
   // Redundant URLs which point to encrypted off-chain secrets

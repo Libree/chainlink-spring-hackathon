@@ -38,8 +38,10 @@ task("functions-simulate", "Simulates an end-to-end fulfillment locally for the 
     // Deploy a mock oracle & registry contract to simulate a fulfillment
     const { oracle, registry, linkToken } = await deployMockOracle()
     // Deploy the client contract
+    const strategyFactory = await ethers.getContractFactory("StrategyManager")
+    const strategyManager = await strategyFactory.deploy()
     const clientFactory = await ethers.getContractFactory("FunctionsConsumer")
-    const client = await clientFactory.deploy(oracle.address)
+    const client = await clientFactory.deploy(oracle.address, strategyManager.address)
     await client.deployTransaction.wait(1)
 
     const accounts = await ethers.getSigners()
@@ -177,7 +179,9 @@ const getGasUsedForFulfillRequest = async (success, result) => {
   const simulatedRequestId = "0x0000000000000000000000000000000000000000000000000000000000000001"
 
   const clientFactory = await ethers.getContractFactory("FunctionsConsumer")
-  const client = await clientFactory.deploy(deployer.address)
+  const strategyFactory = await ethers.getContractFactory("StrategyManager")
+  const strategyManager = await strategyFactory.deploy()
+  const client = await clientFactory.deploy(deployer.address, strategyManager.address)
   client.addSimulatedRequestId(deployer.address, simulatedRequestId)
   await client.deployTransaction.wait(1)
 
