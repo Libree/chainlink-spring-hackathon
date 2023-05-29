@@ -4,6 +4,8 @@ pragma solidity ^0.8.7;
 import {Functions, FunctionsClient} from "./dev/functions/FunctionsClient.sol";
 // import "@chainlink/contracts/src/v0.8/dev/functions/FunctionsClient.sol"; // Once published
 import {ConfirmedOwner} from "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
+import "./strings.sol";
+import {StrategyManager} from "./StrategyManager.sol";
 
 /**
  * @title Functions Consumer contract
@@ -12,10 +14,13 @@ import {ConfirmedOwner} from "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
  */
 contract FunctionsConsumer is FunctionsClient, ConfirmedOwner {
   using Functions for Functions.Request;
+  using strings for *;
 
   bytes32 public latestRequestId;
   bytes public latestResponse;
   bytes public latestError;
+  address public strategyManagerAddress;
+
 
   event OCRResponse(bytes32 indexed requestId, bytes result, bytes err);
 
@@ -26,7 +31,9 @@ contract FunctionsConsumer is FunctionsClient, ConfirmedOwner {
    */
   // https://github.com/protofire/solhint/issues/242
   // solhint-disable-next-line no-empty-blocks
-  constructor(address oracle) FunctionsClient(oracle) ConfirmedOwner(msg.sender) {}
+  constructor(address oracle, address strategyManager) FunctionsClient(oracle) ConfirmedOwner(msg.sender) {
+    strategyManagerAddress = strategyManager;
+  }
 
   /**
    * @notice Send a simple request
@@ -68,6 +75,8 @@ contract FunctionsConsumer is FunctionsClient, ConfirmedOwner {
   function fulfillRequest(bytes32 requestId, bytes memory response, bytes memory err) internal override {
     latestResponse = response;
     latestError = err;
+    string[] memory parts = stringParts(response);
+    StrategyManager(strategyManagerAddress).updateRebalace(parts);
     emit OCRResponse(requestId, response, err);
   }
 
@@ -82,5 +91,16 @@ contract FunctionsConsumer is FunctionsClient, ConfirmedOwner {
 
   function addSimulatedRequestId(address oracleAddress, bytes32 requestId) public onlyOwner {
     addExternalRequest(oracleAddress, requestId);
+  }
+
+  function stringParts(bytes memory _data) public pure returns (string[] memory parts) {
+    strings.slice memory s = string(_data).toSlice();
+    strings.slice memory delim = ",".toSlice();
+    string[] memory parts = new string[](s.count(delim));
+    for (uint i = 0; i < parts.length; i++) {
+      parts[i] = s.split(delim).toString();
+    }
+
+    return parts;
   }
 }
