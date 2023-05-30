@@ -7,8 +7,9 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "hardhat/console.sol";
 import {ISwapManager} from "./ISwapManager.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@chainlink/contracts/src/v0.8/AutomationCompatible.sol";
 
-contract StrategyManager {
+contract StrategyManager is AutomationCompatibleInterface {
   using Counters for Counters.Counter;
   address public swapManagerAddress;
 
@@ -45,7 +46,7 @@ contract StrategyManager {
 
     strategies[strategyId] = Strategy(
       _strategyName,
-      true,
+      false,
       _rebalancePeriod,
       _riskTolerance,
       _investmentGoal,
@@ -59,18 +60,17 @@ contract StrategyManager {
     (uint256 strategyId, ) = strToUint(parts[0]);
     Strategy storage strategy = strategies[strategyId];
     strategy.rebalanceRequired = true;
-    (uint256 btcAmount, ) = strToUint(parts[3]);
-    (uint256 ethAmount, ) = strToUint(parts[4]);
+    (uint256 usdcAmount, ) = strToUint(parts[2]);
+    (uint256 btcAmount, ) = strToUint(parts[4]);
     (uint256 linkAmount, ) = strToUint(parts[5]);
-    (uint256 usdcAmount, ) = strToUint(parts[6]);
-    strategy.amounts = [btcAmount, ethAmount, linkAmount, usdcAmount];
+    strategy.amounts = [usdcAmount, btcAmount, linkAmount];
 
     strategies[strategyId] = strategy;
 
     emit Rebalance(strategyId, parts[1], parts[2]);
   }
 
-  function rebalance(uint256 strategyId) external {
+  function rebalance(uint256 strategyId) public {
     Strategy storage strategy = strategies[strategyId];
 
     if (strategy.rebalanceRequired) {
@@ -92,7 +92,7 @@ contract StrategyManager {
     return strategies[_id];
   }
 
-  function getRebalanceRequired(uint256 _id) external view returns (bool) {
+  function getRebalanceRequired(uint256 _id) public view returns (bool) {
     return strategies[_id].rebalanceRequired;
   }
 
@@ -122,5 +122,26 @@ contract StrategyManager {
     }
 
     return (res, true);
+  }
+
+  function checkUpkeep(bytes calldata) external view override returns (bool upkeepNeeded, bytes memory performData) {
+    uint totalStrategies = _strategyIdCounter.current();
+    uint strategyToRebalance = 0;
+    bool upkeepNeeded = false;
+
+    for (uint i = 0; i < totalStrategies; i++) {
+      if (getRebalanceRequired(i)) {
+        strategyToRebalance = i;
+        upkeepNeeded = true;
+        break;
+      }
+    }
+    return (upkeepNeeded, abi.encodePacked(strategyToRebalance));
+  }
+
+  function performUpkeep(bytes calldata performData) external override {
+    uint256 strategyToRebalance = abi.decode(performData, (uint));
+
+    rebalance(strategyToRebalance);
   }
 }
