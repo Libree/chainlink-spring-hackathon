@@ -15,7 +15,12 @@
     "lint:contracts": "solhint 'contracts/*.sol'",
     "lint:contracts:fix": "solhint 'contracts/**/*.sol' --fix",
     "format:check": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "deploy:manager:mumbai": "npx hardhat run --network polygonMumbai scripts/deploy-manager.js",
+    "deploy:strategy:mumbai": "npx hardhat run --network polygonMumbai scripts/createStrategy.js",
+    "strategy:rebalance": "npx hardhat run --network polygonMumbai scripts/rebalance.js",
+    "update:rebalance": "npx hardhat run --network polygonMumbai scripts/update-rebalance.js"
+
   },
   "devDependencies": {
     "@chainlink/contracts": "0.5.1",

@@ -2,6 +2,7 @@
     "name": "hardhat-project",
     "scripts": {
         "test": "npx hardhat test --network hardhat",
+        "deploy:local": "npx hardhat run --network hardhat scripts/deploy.ts",
         "deploy:mumbai": "npx hardhat run --network mumbai scripts/deploy.ts"
     },
     "devDependencies": {
