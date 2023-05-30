@@ -17,6 +17,7 @@ import TokenList from 'components/tokenList';
 import TransferList from 'components/transferList';
 import {
   PageWrapper,
+  RebalanceSectionWrapper,
   StrategySectionWrapper,
   TokenSectionWrapper,
   TransferSectionWrapper,
@@ -35,6 +36,7 @@ import { htmlIn } from 'utils/htmlIn';
 import { NewStrategy } from 'utils/paths';
 import StrategyList from 'components/strategyList';
 import { useStrategyManager } from 'hooks/useStrategyManager';
+import RebalanceList from 'components/rebalanceList';
 
 type Sign = -1 | 0 | 1;
 const colors: Record<Sign, string> = {
@@ -43,7 +45,7 @@ const colors: Record<Sign, string> = {
   '0': 'text-ui-600',
 };
 
-const Finance: React.FC = () => {
+const Strategy: React.FC = () => {
   const { t } = useTranslation();
   const { data: daoDetails, isLoading } = useDaoDetailsQuery();
   const { open } = useGlobalModalContext();
@@ -69,33 +71,6 @@ const Finance: React.FC = () => {
     return <Loading />;
   }
 
-  if (tokens.length === 0 && isDesktop)
-    return (
-      <PageEmptyState
-        title={t('finance.emptyState.title')}
-        subtitle={htmlIn(t)('finance.emptyState.description')}
-        Illustration={
-          <div className="flex">
-            <IllustrationHuman
-              {...{
-                body: 'chart',
-                expression: 'excited',
-                hair: 'bun',
-              }}
-              {...(isMobile
-                ? { height: 165, width: 295 }
-                : { height: 225, width: 400 })}
-            />
-            <IlluObject object={'wallet'} className="-ml-36" />
-          </div>
-        }
-        buttonLabel={t('finance.emptyState.buttonLabel')}
-        onClick={() => {
-          open('deposit');
-        }}
-      />
-    );
-
   return (
     <>
       <PageWrapper
@@ -118,63 +93,23 @@ const Finance: React.FC = () => {
                     {new Intl.NumberFormat('en-US', {
                       style: 'currency',
                       currency: 'USD',
-                    }).format(totalAssetValue)}
+                    }).format(10000)}
                   </Title>
 
                   <SubtitleContainer>
-                    <Tag label="24h" />
-                    <Description
-                      className={colors[Math.sign(totalAssetChange) as Sign]}
-                    >
-                      {new Intl.NumberFormat('en-US', {
-                        style: 'currency',
-                        currency: 'USD',
-                        signDisplay: 'always',
-                      }).format(totalAssetChange)}
+                    <Description>
+                      {<b>Name: </b>}Risk Parity {<br/>}
+                      {<b>Investment goal: </b>}Risk Parity {<br/>}
+                    </Description>
+                    <Description>
                     </Description>
                   </SubtitleContainer>
                 </TextContainer>
-
-                <ButtonText
-                  size="large"
-                  label={'New Strategy'}
-                  iconLeft={<IconAdd />}
-                  className="w-full tablet:w-auto"
-                  onClick={() => {
-                    trackEvent('finance_newTransferBtn_clicked', {
-                      dao_address: daoDetails?.address,
-                    });
-                    navigate(generatePath(NewStrategy, { network, dao }));
-                  }}
-                />
-
-                {/* Button */}
-                <ButtonText
-                  size="large"
-                  label={t('TransferModal.newTransfer')}
-                  iconLeft={<IconAdd />}
-                  className="w-full tablet:w-auto"
-                  onClick={() => {
-                    trackEvent('finance_newTransferBtn_clicked', {
-                      dao_address: daoDetails?.address,
-                    });
-                    open();
-                  }}
-                />
               </ContentContainer>
             </Header>
           </HeaderContainer>
         }
       >
-        <>
-          <div className={'h-4'} />
-          <StrategySectionWrapper title={'Strategies'}>
-            <ListContainer>
-              <StrategyList strategies={tokens.slice(0, 5)} />
-            </ListContainer>
-          </StrategySectionWrapper>
-          <div className={'h-4'} />
-        </>
         {tokens.length === 0 ? (
           <PageEmptyState
             title={t('finance.emptyState.title')}
@@ -208,17 +143,14 @@ const Finance: React.FC = () => {
               </ListContainer>
             </TokenSectionWrapper>
             <div className={'h-4'} />
-            <TransferSectionWrapper
-              title={t('finance.transferSection')}
+            <RebalanceSectionWrapper
+              title={'Latest Rebalances'}
               showButton
             >
               <ListContainer>
-                <TransferList
-                  transfers={transfers.slice(0, 5)}
-                  onTransferClick={handleTransferClicked}
-                />
+                <RebalanceList rebalances={[1]}></RebalanceList>
               </ListContainer>
-            </TransferSectionWrapper>
+            </RebalanceSectionWrapper>
           </>
         )}
       </PageWrapper>
@@ -226,7 +158,7 @@ const Finance: React.FC = () => {
   );
 };
 
-export default withTransaction('Finance', 'component')(Finance);
+export default withTransaction('Strategy', 'component')(Strategy);
 
 const ListContainer = styled.div.attrs({
   className: 'py-2 space-y-2',

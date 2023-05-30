@@ -29,6 +29,7 @@ import { NotFound } from 'utils/paths';
 import '../i18n.config';
 import DepositModal from 'containers/transactionModals/DepositModal';
 import PoapClaimModal from 'containers/poapClaiming/PoapClaimModal';
+import Strategy from 'pages/strategy';
 
 const ExplorePage = lazy(() => import('pages/explore'));
 const NotFoundPage = lazy(() => import('pages/notFound'));
@@ -45,6 +46,7 @@ const TokensPage = lazy(() => import('pages/tokens'));
 const TransfersPage = lazy(() => import('pages/transfers'));
 const NewWithdrawPage = lazy(() => import('pages/newWithdraw'));
 const NewStrategyPage = lazy(() => import('pages/newStrategy'));
+const StrategyPage = lazy(() => import('pages/strategy'));
 
 const NewProposalPage = lazy(() => import('pages/newProposal'));
 const ProposalPage = lazy(() => import('pages/proposal'));
@@ -102,7 +104,11 @@ function App() {
                 />
                 <Route
                   path="finance/new-strategy"
-                  element={<NewStrategyPage/>}
+                  element={<NewStrategyPage />}
+                />
+                <Route
+                  path="finance/strategy"
+                  element={<StrategyPage />}
                 />
                 <Route
                   path="governance/new-proposal"
