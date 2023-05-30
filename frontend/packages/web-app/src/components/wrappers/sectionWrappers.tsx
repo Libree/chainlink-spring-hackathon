@@ -99,6 +99,27 @@ export const TransferSectionWrapper = ({
   );
 };
 
+export const RebalanceSectionWrapper = ({
+  title,
+  children,
+  showButton = false,
+}: SectionWrapperProps) => {
+  const {t} = useTranslation();
+  const {network} = useNetwork();
+  const {dao} = useParams();
+
+  return (
+    <>
+      <SectionHeader title={title} />
+      {children}
+      {showButton && (
+        <div>
+        </div>
+      )}
+    </>
+  );
+};
+
 const Title = styled.p.attrs({
   className: 'flex text-lg font-bold items-center text-ui-800',
 })``;
