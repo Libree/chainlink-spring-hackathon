@@ -47,6 +47,7 @@ const networks = {
     functionsOracleProxy: "0xeA6721aC65BCeD841B8ec3fc5fEdeA6141a0aDE4",
     functionsBillingRegistryProxy: "0xEe9Bf52E5Ea228404bB54BCFbbDa8c21131b9039",
     functionsPublicKey: SHARED_DON_PUBLIC_KEY,
+    swapManager: "0x66C62991a992Bb5FD29da0b8632eD8AEc9f942e5"
   },
   avalancheFuji: {
     url: process.env.AVALANCHE_FUJI_RPC_URL || "UNSET",

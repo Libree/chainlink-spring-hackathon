@@ -3,10 +3,14 @@
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 import "hardhat/console.sol";
+import {ISwapManager} from "./ISwapManager.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract StrategyManager {
   using Counters for Counters.Counter;
+  address public swapManagerAddress;
 
   struct Strategy {
     string name;
@@ -21,9 +25,12 @@ contract StrategyManager {
 
   event Rebalance(uint256 strategyId, string rebalanceRequired, string reason);
 
-
   Counters.Counter public _strategyIdCounter;
   mapping(uint256 => Strategy) public strategies;
+
+  constructor(address swapManager) {
+    swapManagerAddress = swapManager;
+  }
 
   function createStrategy(
     string calldata _strategyName,
@@ -61,6 +68,24 @@ contract StrategyManager {
     strategies[strategyId] = strategy;
 
     emit Rebalance(strategyId, parts[1], parts[2]);
+  }
+
+  function rebalance(uint256 strategyId) external {
+    Strategy storage strategy = strategies[strategyId];
+
+    if (strategy.rebalanceRequired) {
+      for (uint256 i = 1; i < strategy.amounts.length; i++) {
+        IERC20(strategy.assets[0]).approve(swapManagerAddress, strategy.amounts[i]);
+
+        ISwapManager(swapManagerAddress).swapExactInputSingle(
+          strategy.amounts[i],
+          strategy.assets[0],
+          strategy.assets[i]
+        );
+      }
+      strategy.rebalanceRequired = false;
+      strategies[strategyId] = strategy;
+    }
   }
 
   function getStrategy(uint256 _id) external view returns (Strategy memory) {
