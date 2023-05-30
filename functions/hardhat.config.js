@@ -4,6 +4,7 @@ require("@openzeppelin/hardhat-upgrades")
 require("./tasks")
 require("@chainlink/env-enc").config()
 const { networks } = require("./networks")
+require('dotenv').config()
 
 // Enable gas reporting (optional)
 const REPORT_GAS = process.env.REPORT_GAS?.toLowerCase() === "true" ? true : false
@@ -40,14 +41,17 @@ module.exports = {
   },
   networks: {
     hardhat: {
+      forking: {
+        url: process.env.POLYGON_MUMBAI_RPC_URL || ""
+      },
       allowUnlimitedContractSize: true,
       accounts: process.env.PRIVATE_KEY
         ? [
-            {
-              privateKey: process.env.PRIVATE_KEY,
-              balance: "10000000000000000000000",
-            },
-          ]
+          {
+            privateKey: process.env.PRIVATE_KEY,
+            balance: "10000000000000000000000",
+          },
+        ]
         : [],
     },
     ...networks,
