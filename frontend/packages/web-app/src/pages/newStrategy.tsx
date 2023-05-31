@@ -226,7 +226,7 @@ const NewStrategy: React.FC = () => {
               </Step>
               <Step
                 wizardTitle={'Recommended Strategy'}
-                wizardDescription={'This is the strategy selected by the IA model, your proposal will need to pass a vote'}
+                wizardDescription={'This is the strategy selected by the AI model, your proposal will need to pass a vote'}
                 isNextButtonDisabled={
                   false
                 }

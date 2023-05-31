@@ -62,11 +62,7 @@ const Strategy: React.FC = () => {
 
   const { strategy, events } = useStrategyManager()
 
-  const { tokens: tokensStragy } = useStrategyVault(undefined, "0x26866C5Cd897374E31aBbE6f8f63A3eFc814dCCA")
-
-  console.log({strategy})
-  console.log({events})
-
+  const { tokens: tokensStragy } = useStrategyVault(undefined, "0x382Fa90FD0d284289757c530220C72f5E144AA60")
 
   sortTokens(tokens, 'treasurySharePercentage', true);
 

@@ -103,7 +103,7 @@ export const useDaoTransfers = (
 
         // filter the erc20 token deposits
         const erc20DepositsListPromises =
-          alchemyTransfersList.result.transfers.map(
+          alchemyTransfersList.result?.transfers.map(
             async ({from, rawContract, metadata, hash}: AlchemyTransfer) => {
               const {name, symbol, decimals} = await getTokenInfo(
                 rawContract.address,
@@ -129,7 +129,7 @@ export const useDaoTransfers = (
             }
           );
 
-        const erc20DepositsList = await Promise.all(erc20DepositsListPromises);
+        const erc20DepositsList = await Promise.all(erc20DepositsListPromises || []);
 
         if (clientTransfers?.length) {
           subgraphTransfers = clientTransfers.filter(

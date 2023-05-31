@@ -13,12 +13,7 @@ export interface IUseStrategyManager {
 
 
 export const useStrategyManager = (): IUseStrategyManager => {
-  const pluginAddress = '0x26866C5Cd897374E31aBbE6f8f63A3eFc814dCCA'
-  const tokenAddress = '0xe9DcE89B076BA6107Bb64EF30678efec11939234'
-
-  const WBTC_ADDRESS = "0x97e8dE167322a3bCA28E8A49BC46F6Ce128FEC68"
-  const USDC_ADDRESS = "0xe9DcE89B076BA6107Bb64EF30678efec11939234"
-  const LINK_ADDRESS = "0x4e2f1E0dC4EAD962d3c3014e582d974b3cedF743"
+  const pluginAddress = '0x382Fa90FD0d284289757c530220C72f5E144AA60'
 
   const {
     provider: signerProvider,
@@ -27,17 +22,17 @@ export const useStrategyManager = (): IUseStrategyManager => {
   const [events, setEvents] = useState<any | null>(null);
 
 
-  const loadData = async (strategyManager: Contract) => {
+  const loadData = async (strategyManager: Contract, provider: any) => {
 
     const strategy = await strategyManager.getStrategy(0)
 
-    console.log({ strategy })
-
     const eventFilter = strategyManager.filters.Rebalance()
+    const block = await provider.getBlockNumber()
+
     const events = await strategyManager.queryFilter(
       eventFilter,
-      36235690 - 25000,
-      36235690
+      block - 25000,
+      block
     );
 
     setStrategy(strategy)
@@ -54,7 +49,7 @@ export const useStrategyManager = (): IUseStrategyManager => {
           signerProvider);
 
 
-        loadData(strategyManager)
+        loadData(strategyManager, signerProvider)
 
       } catch (error) {
         console.log(error)

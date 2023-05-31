@@ -2,7 +2,7 @@ const { ethers } = require("hardhat")
 
 async function main() {
 
-    const STRATEGY_MANAGERS = '0x26866C5Cd897374E31aBbE6f8f63A3eFc814dCCA';
+    const STRATEGY_MANAGERS = '0x382Fa90FD0d284289757c530220C72f5E144AA60';
 
     const StrategyManager = await ethers.getContractFactory("StrategyManager");
     const strategyManager = StrategyManager.attach(STRATEGY_MANAGERS);
@@ -12,12 +12,12 @@ async function main() {
     const LINK_ADDRESS = "0x4e2f1E0dC4EAD962d3c3014e582d974b3cedF743"
 
     const tx = await strategyManager.createStrategy(
-        "Risk Parity",
+        "Momemtum",
         [USDC_ADDRESS, WBTC_ADDRESS, LINK_ADDRESS],
-        [10, 20, 30],
+        [1000, 20000, 300000],
         12311233,
-        "low",
-        "get some yield"
+        "high",
+        "Maximize return event if there is some volatility"
     )
 
     await tx.wait()

@@ -10,7 +10,7 @@ const RebalanceList: React.FC<TransferListProps> = ({
 }) => {
 
   if (rebalances?.length === 0 || !rebalances)
-    return <p data-testid="transferList">{'No rebalances yey'}</p>;
+    return <p data-testid="transferList">{'No rebalances yet'}</p>;
 
   return (
     <div className="space-y-2" data-testid="transferList">

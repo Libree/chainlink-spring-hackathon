@@ -9,7 +9,7 @@ import { Strategy } from 'utils/paths';
 
 
 type TokenListProps = {
-  strategies: VaultToken[];
+  strategies: any[];
 };
 
 const usdFormatter = new Intl.NumberFormat('en-US', {
@@ -26,18 +26,19 @@ const StrategyList: React.FC<TokenListProps> = ({ strategies }) => {
   const { dao } = useParams();
   const navigate = useNavigate();
 
-  if (strategies.length === 0)
+  if (strategies?.length === 0)
     return <p data-testid="tokenList">{t('allTokens.noTokens')}</p>;
+
+  console.log(strategies)
 
   return (
     <div className="space-y-1.5" data-testid="tokenList">
-      {strategies.map(strategy => (
         <div onClick={() => navigate(generatePath(Strategy, {network, dao}))}>
         <CardToken
-          key={strategy.metadata.id}
-          tokenName={strategy.metadata.name}
+          key={strategies?.name}
+          tokenName={strategies?.name}
           tokenSymbol={''}
-          tokenImageUrl={strategy.metadata.imgUrl || ''}
+          tokenImageUrl={''}
           tokenCount={''}
           {
             {
@@ -47,7 +48,6 @@ const StrategyList: React.FC<TokenListProps> = ({ strategies }) => {
           }
         />
         </div>
-      ))}
     </div>
   );
 };

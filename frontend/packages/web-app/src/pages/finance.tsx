@@ -60,6 +60,7 @@ const Finance: React.FC = () => {
 
   const { strategy } = useStrategyManager()
 
+
   sortTokens(tokens, 'treasurySharePercentage', true);
 
   /*************************************************
@@ -69,7 +70,7 @@ const Finance: React.FC = () => {
     return <Loading />;
   }
 
-  if (tokens.length === 0 && isDesktop)
+  if (tokens.length === 0 && strategy?.name == '' && isDesktop)
     return (
       <PageEmptyState
         title={t('finance.emptyState.title')}
@@ -166,16 +167,18 @@ const Finance: React.FC = () => {
           </HeaderContainer>
         }
       >
-        <>
+
+        {strategy?.name !== '' && <>
           <div className={'h-4'} />
           <StrategySectionWrapper title={'Strategies'}>
             <ListContainer>
-              <StrategyList strategies={tokens.slice(0, 5)} />
+              <StrategyList strategies={strategy} />
             </ListContainer>
           </StrategySectionWrapper>
           <div className={'h-4'} />
-        </>
-        {tokens.length === 0 ? (
+        </>}
+
+        {tokens.length === 0 && strategy?.name === '' ? (
           <PageEmptyState
             title={t('finance.emptyState.title')}
             subtitle={htmlIn(t)('finance.emptyState.description')}
