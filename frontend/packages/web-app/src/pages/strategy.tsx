@@ -37,6 +37,7 @@ import { NewStrategy } from 'utils/paths';
 import StrategyList from 'components/strategyList';
 import { useStrategyManager } from 'hooks/useStrategyManager';
 import RebalanceList from 'components/rebalanceList';
+import { useStrategyVault } from 'hooks/useStrategyVault';
 
 type Sign = -1 | 0 | 1;
 const colors: Record<Sign, string> = {
@@ -57,10 +58,15 @@ const Strategy: React.FC = () => {
   const navigate = useNavigate();
   const { breadcrumbs, icon, tag } = useMappedBreadcrumbs();
 
-  const { handleTransferClicked } = useTransactionDetailContext();
   const { tokens, totalAssetChange, totalAssetValue, transfers } = useDaoVault();
 
-  const { strategy } = useStrategyManager()
+  const { strategy, events } = useStrategyManager()
+
+  const { tokens: tokensStragy } = useStrategyVault(undefined, "0x26866C5Cd897374E31aBbE6f8f63A3eFc814dCCA")
+
+  console.log({strategy})
+  console.log({events})
+
 
   sortTokens(tokens, 'treasurySharePercentage', true);
 
@@ -89,17 +95,10 @@ const Strategy: React.FC = () => {
               {/* Main */}
               <ContentContainer>
                 <TextContainer>
-                  <Title>
-                    {new Intl.NumberFormat('en-US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    }).format(10000)}
-                  </Title>
-
                   <SubtitleContainer>
                     <Description>
-                      {<b>Name: </b>}Risk Parity {<br/>}
-                      {<b>Investment goal: </b>}Risk Parity {<br/>}
+                      {<b>Name: </b>} {strategy?.name} {<br />}
+                      {<b>Investment goal: </b>} {strategy?.investmentGoal} {<br />}
                     </Description>
                     <Description>
                     </Description>
@@ -110,7 +109,7 @@ const Strategy: React.FC = () => {
           </HeaderContainer>
         }
       >
-        {tokens.length === 0 ? (
+        {tokensStragy.length === 0 ? (
           <PageEmptyState
             title={t('finance.emptyState.title')}
             subtitle={htmlIn(t)('finance.emptyState.description')}
@@ -139,7 +138,7 @@ const Strategy: React.FC = () => {
             <div className={'h-4'} />
             <TokenSectionWrapper title={t('finance.tokenSection')}>
               <ListContainer>
-                <TokenList tokens={tokens.slice(0, 5)} />
+                <TokenList tokens={tokensStragy} />
               </ListContainer>
             </TokenSectionWrapper>
             <div className={'h-4'} />
@@ -148,7 +147,7 @@ const Strategy: React.FC = () => {
               showButton
             >
               <ListContainer>
-                <RebalanceList rebalances={[1]}></RebalanceList>
+                <RebalanceList rebalances={events}></RebalanceList>
               </ListContainer>
             </RebalanceSectionWrapper>
           </>

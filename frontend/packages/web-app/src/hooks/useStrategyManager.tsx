@@ -8,6 +8,7 @@ import { erc20TokenABI } from 'abis/erc20TokenABI'
 
 export interface IUseStrategyManager {
   strategy: any | null;
+  events: any | null;
 }
 
 
@@ -23,6 +24,7 @@ export const useStrategyManager = (): IUseStrategyManager => {
     provider: signerProvider,
   } = useSigner();
   const [strategy, setStrategy] = useState<any | null>(null);
+  const [events, setEvents] = useState<any | null>(null);
 
 
   const loadData = async (strategyManager: Contract) => {
@@ -38,7 +40,8 @@ export const useStrategyManager = (): IUseStrategyManager => {
       36235690
     );
 
-    console.log({ events })
+    setStrategy(strategy)
+    setEvents(events)
 
   }
 
@@ -61,6 +64,7 @@ export const useStrategyManager = (): IUseStrategyManager => {
   }, [signerProvider]);
 
   return {
-    strategy
+    strategy,
+    events
   };
 };
