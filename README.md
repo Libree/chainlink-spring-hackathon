@@ -33,4 +33,4 @@ This repository has four components:
 ## Contracts Addresses (Polygon Mumbai):
 - [Strategy Manager: 0xbd49eAa77A1BADfC4a7e96D5Fd893ef2847821d6](https://mumbai.polygonscan.com/address/0xbd49eAa77A1BADfC4a7e96D5Fd893ef2847821d6)
 - [Swap Manager: 0x66C62991a992Bb5FD29da0b8632eD8AEc9f942e5](https://mumbai.polygonscan.com/address/0x66C62991a992Bb5FD29da0b8632eD8AEc9f942e5)
-- [Functions Consumer: ](https://mumbai.polygonscan.com/address/)
+- [Functions Consumer: 0x68ACA735AcdA52bB8709e2d1186E96B0fd09fa46](https://mumbai.polygonscan.com/address/0x68ACA735AcdA52bB8709e2d1186E96B0fd09fa46)
