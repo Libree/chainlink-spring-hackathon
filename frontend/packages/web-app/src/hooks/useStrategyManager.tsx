@@ -13,7 +13,7 @@ export interface IUseStrategyManager {
 
 
 export const useStrategyManager = (): IUseStrategyManager => {
-  const pluginAddress = '0x382Fa90FD0d284289757c530220C72f5E144AA60'
+  const pluginAddress = '0xbd49eAa77A1BADfC4a7e96D5Fd893ef2847821d6'
 
   const {
     provider: signerProvider,

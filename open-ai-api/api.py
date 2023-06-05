@@ -28,6 +28,7 @@ def get_recommendation(initial_amount, risk_tolerance, assets, investment_goal):
     ai_message = chat(messages)
 
     content = ai_message.content
+    print(content)
     initial_index = content.find('{')
     final_index = content.rfind('}')
     json_data = content[initial_index:final_index+1]
