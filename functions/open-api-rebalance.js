@@ -5,7 +5,7 @@ const amountAssets = [...args[3].split(",")]
 const strategyId = args[4]
 
 const openAIRequest = Functions.makeHttpRequest({
-    url: `http://127.0.0.1:5000/getRebalance`,
+    url: `https://69ef-31-221-156-146.ngrok-free.app/getRebalance`,
     method: 'POST',
     data: {
         "strategy": strategy,
@@ -16,18 +16,8 @@ const openAIRequest = Functions.makeHttpRequest({
 })
 
 try {
-    // response = await openAIRequest
+    response = await openAIRequest
 
-    response = {
-        "allocation": {
-            "BTC": 200,
-            "ETH": 300,
-            "LINK": 2000,
-            "USDC": 1000
-        },
-        "reasoning": "Current weights do not align with risk parity strategy",
-        "rebalanceNeeded": "yes"
-    }
 } catch (error) {
     throw new Error(`Request failed: ${error.message}`)
 }
