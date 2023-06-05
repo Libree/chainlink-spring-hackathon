@@ -13,7 +13,7 @@ contract AIInvestPluginSetup is PluginSetup {
 
     /// @notice The contract constructor, that deployes the `SwapToken` plugin logic contract.
     constructor() {
-        aiInvestPlugin = new AIInvestPlugin();
+        aiInvestPlugin = new AIInvestPlugin(address(this));
     }
 
     /// @inheritdoc IPluginSetup
