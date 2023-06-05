@@ -25,12 +25,14 @@ contract AIInvestPluginSetup is PluginSetup {
         returns (address plugin, PreparedSetupData memory preparedSetupData)
     {
 
-        // Prepare and Deploy the plugin proxy.
+         address _swapManager = abi.decode(_data, (address));
+
         plugin = createERC1967Proxy(
             address(aiInvestPlugin),
             abi.encodeWithSelector(
                 AIInvestPlugin.initialize.selector,
-                _dao
+                _dao,
+                _swapManager
             )
         );
 
