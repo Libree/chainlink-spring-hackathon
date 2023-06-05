@@ -18,7 +18,7 @@ task("functions-deploy-client", "Deploys the FunctionsConsumer contract")
     await run("compile")
 
     const clientContractFactory = await ethers.getContractFactory("FunctionsConsumer")
-    const clientContract = await clientContractFactory.deploy(oracleAddress)
+    const clientContract = await clientContractFactory.deploy(oracleAddress, networks[network.name].strategyManager)
 
     console.log(
       `\nWaiting ${networks[network.name].confirmations} blocks for transaction ${
