@@ -25,9 +25,9 @@ In summary, the Aragon plugin allows DAOs to set rebalancing strategies and expo
 This repository has four components:
 - [Contracts](https://github.com/Libree/chainlink-spring-hackathon/tree/main/contracts): Implements the aragon plugin to be used in DAOs using solidity v0.8
 - [Contracts-v7](https://github.com/Libree/chainlink-spring-hackathon/tree/main/contracts-v7): Implements a swap manager in solidity v0.7 to execute the swaps on rebalance, then an interface of this manager is imported in the strategy Manager, that is using solidity v0.8
-- [Frontend](https://github.com/ialberquilla/chainlink-technical-indicators/tree/main/frontend): an Aragon UI fork to implement all the new pages need to use this plugin
-- [Functions](https://github.com/ialberquilla/chainlink-technical-indicators/tree/main/frontend): Implements chainlink functions api call, in order to receive calls from smart contracts with the current status of the strategy and call and external api to get the recommended values that will be send back to the contract.
-- [OpenAI API](https://github.com/ialberquilla/chainlink-technical-indicators/tree/main/frontend): An API to interact with chatGPT open AI model, receives the parameters send by the user, and leveragin langchain api, sends the data needed for the model to estimate the most efficient rebalance for the treasury if needed.
+- [Frontend](https://github.com/Libree/chainlink-spring-hackathon/tree/main/frontend): an Aragon UI fork to implement all the new pages need to use this plugin
+- [Functions](https://github.com/Libree/chainlink-spring-hackathon/tree/main/functions): Implements chainlink functions api call, in order to receive calls from smart contracts with the current status of the strategy and call and external api to get the recommended values that will be send back to the contract.
+- [OpenAI API](https://github.com/Libree/chainlink-spring-hackathon/tree/main/open-ai-api): An API to interact with chatGPT open AI model, receives the parameters send by the user, and leveragin langchain api, sends the data needed for the model to estimate the most efficient rebalance for the treasury if needed.
 
 
 ## Contracts Addresses (Polygon Mumbai):
